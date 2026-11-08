@@ -11,7 +11,7 @@ import (
 )
 
 // PageURL is where the page is published.
-const PageURL = "https://status.changkun.de"
+const PageURL = "https://changkun.github.io/status/"
 
 // OpenIssue is an open alert issue, as `gh issue list --json number,body`
 // lists it.

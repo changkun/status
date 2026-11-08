@@ -1,6 +1,6 @@
 # Status
 
-The source of [status.changkun.de](https://status.changkun.de): the current state and 90-day history of changkun.de, golang.design and poly.red, component by component.
+The source of [changkun.github.io/status](https://changkun.github.io/status/): the current state and 90-day history of changkun.de, golang.design and poly.red, component by component.
 
 It runs on GitHub, not on the server it checks, so it keeps working when that server is down. A scheduled workflow probes every component from GitHub's runners every five minutes, records the results, opens a GitHub issue for each outage, and publishes a static page to GitHub Pages.
 
@@ -62,7 +62,7 @@ History is one file per UTC day, `YYYY-MM-DD.json`, on the `history` branch, so 
 
 ### Set up once
 
-In the repository settings, set Pages to deploy from GitHub Actions and the custom domain to `status.changkun.de`. `site/CNAME` carries the domain. Point a `CNAME` record for `status` at `changkun.github.io`.
+In the repository settings, set Pages to deploy from GitHub Actions. The page is served at `changkun.github.io/status/`; it links its style and fonts relatively, so a custom domain needs only the Pages setting, a DNS record, and `PageURL` in `internal/status/alerts.go`.
 
 GitHub turns off scheduled workflows in a public repository after 60 days without activity, and emails a warning first. If that happens, enable the workflow again under Actions.
 

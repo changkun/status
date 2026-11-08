@@ -1,3 +1,2 @@
-site/*
-!site/CNAME
+/site/
 /history/
