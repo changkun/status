@@ -10,71 +10,73 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="top">
-  <a class="brand" href="https://changkun.de/"><span class="logo">Changkun Ou</span></a>
-  <span class="page-name">Status</span>
-</header>
 <main>
-  <section class="headline {{.Class}}" aria-live="polite">
-    <span class="dot" aria-hidden="true"></span>
-    <h1>{{.Headline}}</h1>
-  </section>
-  {{if .Stale}}<p class="notice">The newest check is more than 30 minutes old. Checks may be delayed, so the states below may be out of date.</p>{{end}}
+  <header>
+    <div class="eyebrow mono"><a href="https://changkun.de/">Changkun Ou</a> · Status</div>
+    <h1>{{.Lead}}{{if .Word}}<span class="{{.Class}}">{{.Word}}</span>{{end}}</h1>
+    <p class="lede">changkun.de, golang.design and poly.red, checked from outside every five minutes.</p>
+    {{if .LastChecked}}<p class="checked mono">Last checked <time datetime="{{.LastCheckedISO}}">{{.LastChecked}}</time></p>{{end}}
+    {{if .Stale}}<p class="notice mono">The newest check is more than 30 minutes old, so the states below may be out of date.</p>{{end}}
+  </header>
 
   {{if .Open}}
-  <section aria-labelledby="open-h">
-    <h2 id="open-h">Open incidents</h2>
+  <section class="incidents" aria-labelledby="open-h">
+    <h2 id="open-h" class="label mono">Open incidents</h2>
     {{range .Open}}{{template "incident" .}}{{end}}
   </section>
   {{end}}
 
+  <div class="divider"></div>
+
+  <div class="row head mono" aria-hidden="true">
+    <span></span><span></span>
+    <span class="axis"><span class="days">90 days ago</span><span class="days-short">30 days ago</span><span>Today</span></span>
+    <span class="num">Uptime</span><span class="num">Last</span>
+  </div>
   {{range .Sites}}
   <section class="site" aria-label="{{.Name}}">
-    <div class="site-head">
-      <h2><a href="https://{{.Name}}/">{{.Name}}</a></h2>
+    <div class="site-head mono">
+      <h2 class="label"><a href="https://{{.Name}}/">{{.Name}}</a></h2>
       <span class="state {{.Class}}">{{.Label}}</span>
     </div>
-    <ul class="services">
+    <ul class="rows">
       {{$site := .Name}}{{range .Services}}
-      <li class="service">
-        <div class="service-head">
-          <span class="service-name">{{.Name}}</span>
-          <span class="state {{.Class}}">{{.Label}}{{if .Latency}} <span class="latency">· {{.Latency}}</span>{{end}}</span>
-        </div>
+      <li class="row {{.Class}}">
+        <span class="dot" role="img" aria-label="{{.Label}}" title="{{.Label}}"></span>
+        <span class="name">{{.Name}}</span>
         <ol class="bars" aria-label="{{$site}} {{.Name}} daily uptime, last 90 days">
           {{range .Bars}}<li class="bar {{.Class}}" title="{{.Tip}}"></li>{{end}}
         </ol>
-        <div class="service-foot"><span>90 days ago</span><span>{{.Uptime}}</span><span>Today</span></div>
+        <span class="num mono">{{.Uptime}}</span>
+        <span class="num mono state {{.Class}}">{{if .Latency}}{{.Latency}}{{else}}{{.Label}}{{end}}</span>
       </li>
       {{end}}
     </ul>
   </section>
   {{end}}
-  <p class="legend"><span class="item"><span class="key up"></span>Running</span> <span class="item"><span class="key degraded"></span>Some slow or failed checks</span> <span class="item"><span class="key down"></span>Down for a while</span> <span class="item"><span class="key nodata"></span>No data</span></p>
+  <p class="legend mono"><span><i class="key up"></i>Running</span> <span><i class="key degraded"></i>Slow or failed checks</span> <span><i class="key down"></i>Down</span> <span><i class="key nodata"></i>No data</span></p>
 
-  <section aria-labelledby="past-h">
-    <h2 id="past-h">Past incidents</h2>
+  <div class="divider"></div>
+
+  <section class="incidents" aria-labelledby="past-h">
+    <h2 id="past-h" class="label mono">Past incidents</h2>
     {{range .Past}}{{template "incident" .}}{{else}}<p class="muted">No incidents in the past 90 days.</p>{{end}}
   </section>
 </main>
-<footer class="foot">
-  {{if .LastChecked}}<p>Last checked <time datetime="{{.LastCheckedISO}}">{{.LastChecked}}</time>.</p>{{end}}
-  <p class="muted">Checks run every 5 minutes from GitHub, outside the server they check. A component shows as down or degraded after two checks in a row, and the time next to it is its last response time. Times are UTC.</p>
+<footer>
+  <p>A component changes state after two bad checks in a row, and a check slower than 3 s counts as slow. Times are UTC.</p>
+  <p><a href="https://changkun.de/">Changkun Ou</a> · <a href="https://github.com/changkun/status">Source</a></p>
 </footer>
 </body>
 </html>
 {{define "incident"}}
 <article class="incident">
-  <header>
-    <h3>{{.Title}}</h3>
-    <p class="meta">{{if .Open}}<span class="badge open">Open</span>{{else}}<span class="badge">Resolved</span>{{end}}
-      Started <time datetime="{{.StartedISO}}">{{.Started}}</time>{{if .Resolved}}, resolved <time datetime="{{.ResolvedISO}}">{{.Resolved}}</time>{{end}}.
-      {{if .Components}}Affected: {{.Components}}.{{end}}</p>
-  </header>
+  <h3>{{.Title}}</h3>
+  <p class="meta mono">{{if .Open}}<span class="open">Open</span> · {{end}}<time datetime="{{.StartedISO}}">{{.Started}}</time>{{if .Resolved}} to <time datetime="{{.ResolvedISO}}">{{.Resolved}}</time>{{end}}{{if .Components}} · {{.Components}}{{end}}</p>
   {{range .Paragraphs}}<p>{{.}}</p>{{end}}
   {{if .Updates}}
   <ul class="updates">
-    {{range .Updates}}<li><strong>{{.Status}}</strong> <time datetime="{{.ISO}}">{{.Time}}</time><br>{{.Text}}</li>{{end}}
+    {{range .Updates}}<li><time class="mono" datetime="{{.ISO}}">{{.Time}}</time> <strong>{{.Status}}</strong> {{.Text}}</li>{{end}}
   </ul>
   {{end}}
 </article>

@@ -59,7 +59,7 @@ func TestRenderGolden(t *testing.T) {
 func TestRenderContent(t *testing.T) {
 	got := renderFixture(t, "2026-11-04T12:00:00Z")
 	for _, want := range []string{
-		"Some components are degraded", // links has been slow for three checks
+		`Some components are <span class="degraded">degraded</span>`, // links has been slow for three checks
 		"Open incidents", "Short links are slow",
 		"Past incidents", "The blog was unavailable",
 		"Last checked <time datetime=\"2026-11-04T11:55:00Z\">Nov 4, 2026 11:55 UTC</time>",

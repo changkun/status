@@ -43,7 +43,9 @@ type incidentView struct {
 }
 
 type pageView struct {
-	Headline, Class             string
+	// Lead and Word make the headline; Word names the state and takes its
+	// color.
+	Lead, Word, Class           string
 	Stale                       bool
 	LastChecked, LastCheckedISO string
 	Sites                       []siteView
@@ -71,16 +73,16 @@ func Render(w io.Writer, services []Service, days []Day, incidents []Incident, n
 	v.Class = overall.String()
 	switch overall {
 	case Up:
-		v.Headline = "All components are running"
+		v.Lead, v.Word = "All components are ", "running"
 	case Degraded:
-		v.Headline = "Some components are degraded"
+		v.Lead, v.Word = "Some components are ", "degraded"
 	case Down:
-		v.Headline = "Some components are down"
+		v.Lead, v.Word = "Some components are ", "down"
 		if allDown(statuses) {
-			v.Headline = "All components are down"
+			v.Lead = "All components are "
 		}
 	default:
-		v.Headline = "Waiting for the first check"
+		v.Lead = "Waiting for the first check"
 	}
 	if last := LastChecked(days); !last.IsZero() {
 		v.LastChecked, v.LastCheckedISO = stamp(last), iso(last)
@@ -92,7 +94,7 @@ func Render(w io.Writer, services []Service, days []Day, incidents []Incident, n
 	for _, st := range statuses {
 		sv := serviceView{Name: st.Service.Name, Class: st.Current.String(), Label: label(st.Current)}
 		if st.Checks > 0 {
-			sv.Uptime = Percent(st.Uptime) + " uptime"
+			sv.Uptime = Percent(st.Uptime)
 			if st.Last.OK {
 				sv.Latency = fmt.Sprintf("%d ms", st.Last.Ms)
 			}
