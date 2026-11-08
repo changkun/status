@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 Latere AI
+# SPDX-FileCopyrightText: 2026 Changkun Ou
 # SPDX-License-Identifier: Apache-2.0
 #
 # Usage: commit-history.sh DIR COMMAND [ARG...]

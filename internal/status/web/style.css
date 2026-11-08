@@ -1,5 +1,4 @@
-/* Tokens follow changkun.de, which shares latere.ai's: the neutral ladder,
-   Inter for text and Instrument Serif for the wordmark. */
+/* Tokens follow changkun.de: the neutral ladder, Inter for text and Instrument Serif for the wordmark. */
 @font-face { font-family: 'Inter'; font-weight: 400; font-display: swap; src: url('fonts/inter-400-latin.woff2') format('woff2'); }
 @font-face { font-family: 'Inter'; font-weight: 500; font-display: swap; src: url('fonts/inter-500-latin.woff2') format('woff2'); }
 @font-face { font-family: 'Inter'; font-weight: 600; font-display: swap; src: url('fonts/inter-600-latin.woff2') format('woff2'); }

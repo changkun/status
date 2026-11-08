@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# SPDX-FileCopyrightText: 2026 Latere AI
+# SPDX-FileCopyrightText: 2026 Changkun Ou
 # SPDX-License-Identifier: Apache-2.0
 #
 # Exercises commit-history.sh against a local bare repository: a clean push,

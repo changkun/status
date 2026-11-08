@@ -80,4 +80,4 @@ After a deliberate change to the page, run `go test ./internal/status -update` a
 
 ## License
 
-Apache-2.0. Derived from [latere-ai/status](https://github.com/latere-ai/status), Copyright 2026 Latere AI. Changes Copyright 2026 Changkun Ou.
+Apache-2.0. Copyright 2026 Changkun Ou.
