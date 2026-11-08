@@ -10,7 +10,7 @@ Each component is one HTTPS GET with a 10 second timeout and no redirects follow
 
 | Site | Components |
 | --- | --- |
-| changkun.de | Website, Blog, Research, Modern C++, Library, Short links, Go imports, urlstat, Midgard |
+| changkun.de | Website, Blog, Research, Books, Modern C++, Bayesian Optimization, AI Alignment, Unverifiable World, Swedish Tutorial, Library, Short links, Go imports, urlstat, Midgard |
 | golang.design | Website, Go under the hood, Go questions, Go history, Research, Miner, Short links, Go imports, SSA playground |
 | poly.red | Go import, RankUI study |
 
