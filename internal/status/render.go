@@ -4,7 +4,9 @@
 package status
 
 import (
+	"crypto/sha256"
 	"embed"
+	"encoding/hex"
 	"fmt"
 	"html/template"
 	"io"
@@ -19,6 +21,18 @@ import (
 var webFS embed.FS
 
 var page = template.Must(template.ParseFS(webFS, "web/index.html.tmpl"))
+
+// styleURL addresses the stylesheet by its content. Pages lets a browser
+// keep a file for ten minutes, so under a fixed name a new page could be
+// shown with the old stylesheet.
+var styleURL = func() string {
+	b, err := webFS.ReadFile("web/style.css")
+	if err != nil {
+		panic(err)
+	}
+	sum := sha256.Sum256(b)
+	return "style.css?v=" + hex.EncodeToString(sum[:6])
+}()
 
 type barView struct{ Class, Tip string }
 
@@ -46,6 +60,7 @@ type pageView struct {
 	// Lead and Word make the headline; Word names the state and takes its
 	// color.
 	Lead, Word, Class           string
+	Style                       string
 	Stale                       bool
 	LastChecked, LastCheckedISO string
 	Sites                       []siteView
@@ -68,7 +83,7 @@ func Render(w io.Writer, services []Service, days []Day, incidents []Incident, n
 	for _, s := range services {
 		statuses = append(statuses, Summarize(days, s, now))
 	}
-	v := pageView{}
+	v := pageView{Style: styleURL}
 	overall := Overall(statuses)
 	v.Class = overall.String()
 	switch overall {

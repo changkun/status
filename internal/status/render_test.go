@@ -5,6 +5,8 @@ package status
 
 import (
 	"bytes"
+	"crypto/sha256"
+	"encoding/hex"
 	"flag"
 	"os"
 	"path/filepath"
@@ -67,6 +69,14 @@ func TestRenderContent(t *testing.T) {
 		if !strings.Contains(got, want) {
 			t.Errorf("page lacks %q", want)
 		}
+	}
+	css, err := webFS.ReadFile("web/style.css")
+	if err != nil {
+		t.Fatal(err)
+	}
+	sum := sha256.Sum256(css)
+	if want := `href="style.css?v=` + hex.EncodeToString(sum[:6]) + `"`; !strings.Contains(got, want) {
+		t.Errorf("page does not link the stylesheet by its content: want %s", want)
 	}
 	if n := strings.Count(got, `class="bar `); n != HistoryDays*len(fixtureServices) {
 		t.Errorf("bars = %d, want %d", n, HistoryDays*len(fixtureServices))
