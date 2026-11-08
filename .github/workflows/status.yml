@@ -1,0 +1,109 @@
+# Probes the components of changkun.de, golang.design and poly.red from
+# GitHub's runners, records the result on the history branch, raises or
+# closes an issue for each outage, and publishes the status page to GitHub
+# Pages. It runs outside the server it checks on purpose.
+name: status
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - incidents/**
+      - cmd/**
+      - internal/**
+      - scripts/**
+      - go.mod
+      - go.sum
+      - .github/workflows/status.yml
+
+# One run at a time, so two runs never race to push history. A run waiting
+# behind another is replaced by a newer one, which is fine: it would have
+# measured the same minutes.
+concurrency:
+  group: status
+  cancel-in-progress: false
+
+permissions: {}
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # push the history branch
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+
+      - name: Check out history
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --heads origin history >/dev/null; then
+            git fetch --depth=1 origin history
+            git worktree add -B history history FETCH_HEAD
+          else
+            git worktree add --orphan -b history history
+          fi
+
+      - name: Build the tool
+        run: go build -o "$RUNNER_TEMP/status" ./cmd/status
+
+      - name: Probe and record
+        run: scripts/commit-history.sh history "$RUNNER_TEMP/status" probe -history .
+
+      - name: Build site
+        run: '"$RUNNER_TEMP/status" build -history history -incidents incidents -out site'
+
+      - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          path: site
+
+  # A job of its own, so a GitHub API failure here never holds back the page.
+  # It reads the history update just pushed; the concurrency group keeps a
+  # newer run from pushing in between.
+  alert:
+    needs: update
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read # check out main and history
+      issues: write # open and close an issue per outage
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+
+      - name: Check out history
+        run: |
+          git fetch --depth=1 origin history
+          git worktree add --detach history FETCH_HEAD
+
+      - name: Build the tool
+        run: go build -o "$RUNNER_TEMP/status" ./cmd/status
+
+      - name: Raise or close outage issues
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: scripts/alert.sh "$RUNNER_TEMP/status" history
+
+  # No `environment:` on this job. A job bound to an environment records a
+  # GitHub deployment, and at one publish every few minutes those records
+  # flood every deployment subscriber (Slack, email). deploy-pages does not
+  # need the environment; the triggers above already limit publishing to main.
+  deploy:
+    needs: update
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      pages: write # publish
+      id-token: write # prove to Pages the deploy comes from this workflow
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
