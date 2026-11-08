@@ -1,11 +1,10 @@
-/* Follows changkun.de: its neutral ink palette with navy as the one accent,
-   Inter for text, Instrument Serif for the headline and lede, and the
-   system monospace for labels and numbers. Green, amber and red appear
+/* Follows changkun.de: its neutral ink palette with navy for a link under
+   the pointer, and Inter for everything. The page runs no script, so it
+   follows the system between light and dark. Green, amber and red appear
    only where they report a state. */
 @font-face { font-family: 'Inter'; font-weight: 400; font-display: swap; src: url('fonts/inter-400-latin.woff2') format('woff2'); }
 @font-face { font-family: 'Inter'; font-weight: 500; font-display: swap; src: url('fonts/inter-500-latin.woff2') format('woff2'); }
-@font-face { font-family: 'Instrument Serif'; font-weight: 400; font-display: swap; src: url('fonts/instrument-serif-400-latin.woff2') format('woff2'); }
-@font-face { font-family: 'Instrument Serif'; font-style: italic; font-weight: 400; font-display: swap; src: url('fonts/instrument-serif-italic-latin.woff2') format('woff2'); }
+@font-face { font-family: 'Inter'; font-weight: 600; font-display: swap; src: url('fonts/inter-600-latin.woff2') format('woff2'); }
 
 :root {
   --bg: #ffffff;
@@ -19,7 +18,7 @@
   --degraded: #b7791f;
   --down: #c83619;
   --nodata: rgba(0, 0, 0, 0.08);
-  color-scheme: light dark;
+  color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root {
@@ -34,6 +33,7 @@
     --degraded: #e0a030;
     --down: #e5634a;
     --nodata: rgba(255, 255, 255, 0.1);
+    color-scheme: dark;
   }
 }
 
@@ -43,35 +43,36 @@ body {
   background: var(--bg);
   color: var(--text);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
+  font-variant-numeric: tabular-nums;
 }
 a { color: inherit; text-decoration: none; transition: color 0.2s; }
 a:hover { color: var(--navy); }
 a:focus-visible { outline: 2px solid var(--text); outline-offset: 2px; border-radius: 4px; }
 p { margin: 0; }
-.mono { font-family: ui-monospace, 'SF Mono', 'Fira Code', Menlo, monospace; }
 .muted { color: var(--text-muted); }
 
-main { max-width: 880px; margin: 0 auto; padding: 64px 24px 0; }
+main { max-width: 880px; margin: 0 auto; padding: 72px 24px 0; }
 
-.eyebrow { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--navy); }
 h1 {
-  margin: 10px 0 0;
-  font: 400 clamp(34px, 6vw, 46px)/1.05 'Instrument Serif', serif;
-  letter-spacing: -0.01em;
+  margin: 0;
+  font-size: clamp(30px, 5vw, 38px);
+  font-weight: 600;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
 }
 h1 .up { color: var(--up); }
 h1 .degraded { color: var(--degraded); }
 h1 .down { color: var(--down); }
-.lede { margin-top: 12px; font: italic 400 19px/1.35 'Instrument Serif', serif; color: var(--text-secondary); }
-.checked { margin-top: 14px; font-size: 11.5px; letter-spacing: 0.04em; color: var(--text-muted); }
-.notice { margin-top: 8px; font-size: 11.5px; color: var(--degraded); }
+.lede { margin-top: 10px; font-size: 16px; color: var(--text-secondary); }
+.checked { margin-top: 8px; font-size: 13px; color: var(--text-muted); }
+.notice { margin-top: 8px; font-size: 13px; color: var(--degraded); }
 
 .divider { height: 1px; margin: 32px 0 24px; background: linear-gradient(90deg, var(--border-strong), var(--border) 60%, transparent); }
 
-.label { margin: 0; font-size: 10px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+h2 { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.01em; }
 
 /* One line per component: state dot, name, 90 daily bars, uptime, and the
    last response time, or the state when there is none to show. */
@@ -82,15 +83,16 @@ h1 .down { color: var(--down); }
   column-gap: 12px;
   padding: 4px 0;
 }
-.num { text-align: right; font-size: 12px; color: var(--text-secondary); white-space: nowrap; }
-.head { padding: 0 0 6px; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-muted); }
+.num { text-align: right; font-size: 13px; color: var(--text-secondary); white-space: nowrap; }
+.head { padding: 0 0 6px; font-size: 12px; color: var(--text-muted); }
 .head .num { font-size: inherit; color: inherit; }
 .axis { display: flex; justify-content: space-between; }
 .days-short { display: none; }
 
-.site { margin-top: 18px; }
+.site { margin-top: 22px; }
 .site-head { display: flex; justify-content: space-between; align-items: baseline; padding-bottom: 6px; margin-bottom: 4px; border-bottom: 1px solid var(--border); }
-.site-head .state { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; }
+.site-head h2 { font-size: 15px; }
+.site-head .state { font-size: 13px; }
 .rows { list-style: none; margin: 0; padding: 0; }
 .name { font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
@@ -111,24 +113,24 @@ h1 .down { color: var(--down); }
 .bar.down { background: var(--down); }
 .bar:hover { opacity: 0.5; }
 
-.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 16px; font-size: 10.5px; letter-spacing: 0.04em; color: var(--text-muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-top: 16px; font-size: 12.5px; color: var(--text-muted); }
 .legend span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
 .key { display: inline-block; width: 8px; height: 8px; border-radius: 1px; background: var(--nodata); }
 .key.up { background: var(--up); }
 .key.degraded { background: var(--degraded); }
 .key.down { background: var(--down); }
 
-.incidents .label { margin-bottom: 12px; }
+.incidents h2 { margin-bottom: 12px; }
 header + .incidents { margin-top: 28px; }
 .incident + .incident { margin-top: 18px; }
-.incident h3 { margin: 0; font-size: 14px; font-weight: 500; }
-.incident .meta { margin: 2px 0 6px; font-size: 11px; color: var(--text-muted); }
+.incident h3 { margin: 0; font-size: 15px; font-weight: 600; }
+.incident .meta { margin: 2px 0 6px; font-size: 13px; color: var(--text-muted); }
 .incident .open { color: var(--down); }
 .incident p:not(.meta) { max-width: 620px; color: var(--text-secondary); }
 .incident p + p { margin-top: 6px; }
-.updates { list-style: none; margin: 8px 0 0; padding: 0 0 0 12px; border-left: 1px solid var(--border-strong); font-size: 13px; color: var(--text-secondary); }
+.updates { list-style: none; margin: 8px 0 0; padding: 0 0 0 12px; border-left: 1px solid var(--border-strong); font-size: 14px; color: var(--text-secondary); }
 .updates li + li { margin-top: 4px; }
-.updates time { font-size: 11px; color: var(--text-muted); }
+.updates time { font-size: 13px; color: var(--text-muted); }
 .updates strong { font-weight: 500; color: var(--text); }
 
 footer { max-width: 880px; margin: 0 auto; padding: 48px 24px 32px; text-align: center; font-size: 13px; color: var(--text-muted); }
@@ -139,7 +141,8 @@ footer a:hover { color: var(--text-secondary); }
 /* Narrow screens: name and numbers on one line, the bars under them, and
    only the last 30 days. */
 @media (max-width: 600px) {
-  main { padding-top: 48px; }
+  main { padding: 64px 16px 0; }
+  footer { padding-left: 16px; padding-right: 16px; }
   .row { grid-template-columns: 8px minmax(0, 1fr) auto auto; row-gap: 4px; padding: 6px 0; }
   .row .bars { grid-column: 2 / -1; grid-row: 2; }
   .bar:nth-child(-n+60) { display: none; }

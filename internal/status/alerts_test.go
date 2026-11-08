@@ -157,8 +157,8 @@ func TestRenderGroupsBySite(t *testing.T) {
 		`Some components are <span class="down">down</span>`,
 		`<span class="state up">All running</span>`,
 		`<span class="state down">1 down</span>`,
-		`<span class="num mono state up">120 ms</span>`,
-		`<span class="num mono state down">Down</span>`,
+		`<span class="num state up">120 ms</span>`,
+		`<span class="num state down">Down</span>`,
 	} {
 		if !strings.Contains(got, want) {
 			t.Errorf("page lacks %q", want)

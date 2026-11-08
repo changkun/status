@@ -58,7 +58,7 @@ Some posts fail to load.
 
 History is one file per UTC day, `YYYY-MM-DD.json`, on the `history` branch, so `main` stays clean. `probe` drops files older than 90 days. If a push is rejected because another run pushed first, `commit-history.sh` rebases and tries again. If the rebase conflicts, it takes the remote branch as it is and probes again. It never force-pushes. The branch's git history still holds old days, so it grows slowly; squash it by hand if it ever matters.
 
-`status build` renders `index.html` from history and incidents with `html/template`, and copies `style.css` and the fonts (Inter and Instrument Serif, both under the SIL Open Font License) from `internal/status/web/`. The page loads nothing from other hosts.
+`status build` renders `index.html` from history and incidents with `html/template`, and copies `style.css` and the fonts (Inter, under the SIL Open Font License) from `internal/status/web/`. The page loads nothing from other hosts.
 
 ### Set up once
 

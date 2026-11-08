@@ -137,7 +137,7 @@ func TestBuildWritesSite(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	for _, f := range []string{"index.html", "style.css", "CNAME", "fonts/inter-400-latin.woff2", "fonts/instrument-serif-italic-latin.woff2"} {
+	for _, f := range []string{"index.html", "style.css", "CNAME", "fonts/inter-400-latin.woff2", "fonts/inter-600-latin.woff2"} {
 		if _, err := os.Stat(filepath.Join(out, f)); err != nil {
 			t.Errorf("missing %s: %v", f, err)
 		}
