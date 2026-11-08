@@ -64,7 +64,6 @@ var Services = []Service{
 	{ID: "go-imports", Site: "changkun.de", Name: "Go imports", URL: "https://changkun.de/x/redir?go-get=1", Expect: 200, Contains: goImport},
 	{ID: "urlstat", Site: "changkun.de", Name: "urlstat", URL: "https://changkun.de/urlstat/dashboard", Expect: 200},
 	{ID: "midgard", Site: "changkun.de", Name: "Midgard", URL: "https://changkun.de/midgard/ping", Expect: 200},
-	{ID: "alert-test", Site: "changkun.de", Name: "Alert test", URL: "https://changkun.de/status-alert-test", Expect: 200},
 
 	{ID: "gd-website", Site: "golang.design", Name: "Website", URL: "https://golang.design/", Expect: 200, Contains: "golang.design"},
 	{ID: "gd-under-the-hood", Site: "golang.design", Name: "Go under the hood", URL: "https://golang.design/under-the-hood/", Expect: 200},
