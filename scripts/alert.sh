@@ -6,8 +6,12 @@
 #
 # Makes the open issues labelled "outage" match the components that are down
 # now: STATUS alerts decides, from HISTORY_DIR and the open issues, which to
-# open and which to close, and this script applies that with gh. GitHub then
-# emails whoever watches the repository. Needs GH_TOKEN with issues: write.
+# open and which to close, and this script applies that with gh. Needs
+# GH_TOKEN with issues: write.
+#
+# ALERT_MENTION, when set, is a GitHub login each new issue mentions. GitHub
+# notifies a mentioned user, and subscribes them to the issue, whether or
+# not they watch the repository, so the closing comment reaches them too.
 set -euo pipefail
 
 status=$1
@@ -25,6 +29,9 @@ for ((i = 0; i < n; i++)); do
   jq -r .body "$tmp/action.json" >"$tmp/body.md"
   case $(jq -r .action "$tmp/action.json") in
   open)
+    if [[ -n ${ALERT_MENTION:-} ]]; then
+      printf '\ncc @%s\n' "$ALERT_MENTION" >>"$tmp/body.md"
+    fi
     gh issue create --label outage --title "$(jq -r .title "$tmp/action.json")" --body-file "$tmp/body.md"
     ;;
   close)

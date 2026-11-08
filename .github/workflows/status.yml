@@ -91,6 +91,7 @@ jobs:
       - name: Raise or close outage issues
         env:
           GH_TOKEN: ${{ github.token }}
+          ALERT_MENTION: ${{ github.repository_owner }}
         run: scripts/alert.sh "$RUNNER_TEMP/status" history
 
   # No `environment:` on this job. A job bound to an environment records a

@@ -28,8 +28,8 @@ type Action struct {
 	Body   string `json:"body"`            // the new issue's text, or the closing comment
 }
 
-// marker ties an issue to its component. It is the last line of every alert
-// issue and invisible on GitHub.
+// marker ties an issue to its component. Every alert issue carries it, and
+// GitHub does not show it.
 var marker = regexp.MustCompile(`<!-- status:component=([A-Za-z0-9._-]+) -->`)
 
 func markerOf(id string) string { return "<!-- status:component=" + id + " -->" }

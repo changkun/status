@@ -20,7 +20,7 @@ Two checks in a row must fail before a component shows as down. A check that pas
 
 ## Alerts
 
-When a component is down, the workflow opens an issue labelled `outage`, titled for example "golang.design: SSA playground is down", with the URL, when the outage began, and what the last check found. When the checks pass again, it closes the issue with a comment. GitHub sends the usual issue notifications, so watching the repository is what subscribes you to alerts.
+When a component is down, the workflow opens an issue labelled `outage`, titled for example "golang.design: SSA playground is down", with the URL, when the outage began, and what the last check found. When the checks pass again, it closes the issue with a comment. Each new issue mentions the repository owner, so GitHub notifies them of the outage and of the closing comment whether or not they watch the repository. Anyone else subscribes by watching it.
 
 Each alert issue ends with a hidden marker naming its component, and the workflow keeps exactly one open issue per component that is down. Other issues are left alone. An outage takes two checks five minutes apart to confirm, and GitHub may start a scheduled run late, so an alert arrives about 10 to 20 minutes after a component goes down.
 

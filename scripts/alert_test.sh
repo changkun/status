@@ -33,13 +33,17 @@ day() { # day STATE...: one run a minute ago per state, for website
   echo "{\"date\":\"$(date -u +%Y-%m-%d)\",\"runs\":[$runs]}" >"$tmp/history/$(date -u +%Y-%m-%d).json"
 }
 
-# 1. Down twice, no issue yet: one issue opens, with the marker.
+# 1. Down twice, no issue yet: one issue opens, with the marker, and
+# mentions ALERT_MENTION only when it is set.
 day false false
 echo '[]' >"$GH_OPEN"
 : >"$GH_LOG"
-"$here/alert.sh" "$tmp/status" "$tmp/history" >/dev/null
+ALERT_MENTION=octo "$here/alert.sh" "$tmp/status" "$tmp/history" >/dev/null
 grep -q '^issue create --label outage --title changkun.de: Website is down' "$GH_LOG" || fail "no issue opened: $(cat "$GH_LOG")"
 grep -q '<!-- status:component=website -->' "$GH_LOG.body" || fail "issue body lacks the marker"
+grep -qx 'cc @octo' "$GH_LOG.body" || fail "issue does not mention ALERT_MENTION"
+"$here/alert.sh" "$tmp/status" "$tmp/history" >/dev/null
+! grep -q 'cc @' "$GH_LOG.body" || fail "issue mentions someone without ALERT_MENTION"
 
 # 2. Still down with the issue open: nothing changes.
 printf '%s\n' '[{"number":12,"body":"x\n\n<!-- status:component=website -->"}]' >"$GH_OPEN"
