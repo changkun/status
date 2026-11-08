@@ -59,7 +59,6 @@ var Services = []Service{
 	{ID: "research", Site: "changkun.de", Name: "Research", URL: "https://changkun.de/research/", Expect: 200, Contains: "Changkun Ou"},
 	{ID: "modern-cpp", Site: "changkun.de", Name: "Modern C++", URL: "https://changkun.de/modern-cpp/", Expect: 200},
 	{ID: "library", Site: "changkun.de", Name: "Library", URL: "https://changkun.de/library/", Expect: 200, Contains: ">Library</a>"},
-	{ID: "ideas", Site: "changkun.de", Name: "Ideas API", URL: "https://api.changkun.de/ideas/ping", Expect: 200, Contains: "pong"},
 	{ID: "links", Site: "changkun.de", Name: "Short links", URL: "https://changkun.de/s/?mode=index&ps=1", Expect: 200, Contains: `"data"`},
 	{ID: "go-imports", Site: "changkun.de", Name: "Go imports", URL: "https://changkun.de/x/redir?go-get=1", Expect: 200, Contains: goImport},
 	{ID: "urlstat", Site: "changkun.de", Name: "urlstat", URL: "https://changkun.de/urlstat/dashboard", Expect: 200},
