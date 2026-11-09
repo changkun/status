@@ -63,6 +63,7 @@ var Services = []Service{
 	{ID: "alignbook", Site: "changkun.de", Name: "AI Alignment", URL: "https://changkun.de/alignbook/", Expect: 200, Contains: "<title>AI Alignment"},
 	{ID: "unverifiable-world", Site: "changkun.de", Name: "Unverifiable World", URL: "https://changkun.de/unverifiable-world/", Expect: 200, Contains: "An Unverifiable World"},
 	{ID: "swedish-tutorial", Site: "changkun.de", Name: "Swedish Tutorial", URL: "https://changkun.de/swedish-tutorial/", Expect: 200, Contains: "瑞典语零基础教程"},
+	{ID: "german-tutorial", Site: "changkun.de", Name: "German Tutorial", URL: "https://changkun.de/german-tutorial/", Expect: 200, Contains: "德语零基础教程"},
 	{ID: "library", Site: "changkun.de", Name: "Library", URL: "https://changkun.de/library/", Expect: 200, Contains: ">Library</a>"},
 	{ID: "links", Site: "changkun.de", Name: "Short links", URL: "https://changkun.de/s/?mode=index&ps=1", Expect: 200, Contains: `"data"`},
 	{ID: "go-imports", Site: "changkun.de", Name: "Go imports", URL: "https://changkun.de/x/redir?go-get=1", Expect: 200, Contains: goImport},
